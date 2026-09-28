@@ -5,8 +5,10 @@
   "gamerule.doPhantomCreeperSpawning.description": "是否在玩家上空自然生成幻翼苦力怕。",
   "gamerule.doPhantomCreeperDaytimeSpawning": "白天也生成幻翼苦力怕",
   "gamerule.doPhantomCreeperDaytimeSpawning.description": "开启后白天也会生成，并且幻翼苦力怕不会被阳光烧着。",
+  "gamerule.doPhantomCreeperIndoorSpawning": "在室内也生成幻翼苦力怕",
+  "gamerule.doPhantomCreeperIndoorSpawning.description": "关闭时，头顶看不到天空的玩家（在建筑内、洞穴里）不会刷新；开启后直接在玩家所在的室内空间生成。",
   "gamerule.phantomCreeperSpawnCount": "每次生成的幻翼苦力怕数量",
-  "gamerule.phantomCreeperSpawnCount.description": "每次刷新时，在每名玩家上方 15~25 格内生成的数量。",
+  "gamerule.phantomCreeperSpawnCount.description": "每次刷新时，在每名玩家附近生成的数量（露天时在上方 15~25 格，室内时在同一空间内）。",
   "gamerule.phantomCreeperSpawnInterval": "幻翼苦力怕生成间隔（秒）",
   "gamerule.phantomCreeperSpawnInterval.description": "每隔多少秒刷新一次。"
 }

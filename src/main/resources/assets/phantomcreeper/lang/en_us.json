@@ -5,8 +5,10 @@
   "gamerule.doPhantomCreeperSpawning.description": "Whether phantom creepers spawn naturally above players.",
   "gamerule.doPhantomCreeperDaytimeSpawning": "Spawn Phantom Creepers during the day",
   "gamerule.doPhantomCreeperDaytimeSpawning.description": "Also spawn during the day. While enabled, phantom creepers don't burn in sunlight.",
+  "gamerule.doPhantomCreeperIndoorSpawning": "Spawn Phantom Creepers indoors",
+  "gamerule.doPhantomCreeperIndoorSpawning.description": "When a player can't see the sky (inside a building or cave), spawn them right inside the same space instead of skipping that player.",
   "gamerule.phantomCreeperSpawnCount": "Phantom Creepers per spawn",
-  "gamerule.phantomCreeperSpawnCount.description": "How many spawn 15-25 blocks above each player every time spawning happens.",
+  "gamerule.phantomCreeperSpawnCount.description": "How many spawn near each player every time spawning happens (15-25 blocks above, or in the same room when indoors).",
   "gamerule.phantomCreeperSpawnInterval": "Phantom Creeper spawn interval (seconds)",
   "gamerule.phantomCreeperSpawnInterval.description": "Seconds between spawns."
 }

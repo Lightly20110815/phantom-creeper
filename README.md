@@ -12,6 +12,8 @@
 - **刷新**：不需要失眠条件。玩家头顶露天时，每隔一段时间在玩家上方 15～25 格内生成
 - **攻击**：锁定 64 格内看得到的玩家 → 尖啸俯冲 → 进入 6 格点燃引信（0.5 秒，会膨胀闪白）→ 爆炸，威力与苦力怕相同
 - **放弃**：玩家躲进室内，连续 5 秒看不到就解除锁定，回到空中盘旋
+- **连锁引爆**：同一批生成的幻翼苦力怕互相炸不死；其中一只爆炸时，同批的其余成员不论在哪都会**立刻全部引爆**
+- **室内生成（可选）**：默认玩家在室内/洞穴里不会刷新；开启游戏规则后会直接生成在玩家所在的室内空间
 - **怕阳光**：白天会像幻翼一样被晒着火（开启白天刷新时除外）
 - **破坏方块**：受 `mobGriefing` 游戏规则控制
 - **掉落**：火药 0～2；被玩家击杀时额外掉幻翼膜 0～1（均受抢夺加成）
@@ -66,7 +68,8 @@
 |---|---|---|---|
 | `doPhantomCreeperSpawning` | `true` | true / false | 是否自然生成幻翼苦力怕 |
 | `doPhantomCreeperDaytimeSpawning` | `false` | true / false | 白天是否也生成。开启时幻翼苦力怕**不会被阳光烧着** |
-| `phantomCreeperSpawnCount` | `1` | 1 ～ 64 | 每次刷新时，在**每名玩家**上方 15～25 格内生成的数量 |
+| `doPhantomCreeperIndoorSpawning` | `false` | true / false | 玩家在室内（头顶看不到天空，含建筑和洞穴）时是否也生成。关闭时不刷；开启时直接生成在玩家所在的室内空间 |
+| `phantomCreeperSpawnCount` | `1` | 1 ～ 64 | 每次刷新时，在**每名玩家**附近生成的数量（露天时在上方 15～25 格，室内时在同一空间内） |
 | `phantomCreeperSpawnInterval` | `60` | 1 ～ 3600 | 两次刷新之间的间隔（秒）。调小后立即生效 |
 
 示例：
@@ -78,6 +81,9 @@
 
 # 白天也刷
 /gamerule doPhantomCreeperDaytimeSpawning true
+
+# 躲在屋里也会刷进屋里
+/gamerule doPhantomCreeperIndoorSpawning true
 
 # 关闭自然生成（刷怪蛋和 /summon 仍然可用）
 /gamerule doPhantomCreeperSpawning false
@@ -92,9 +98,29 @@
 
 1. 世界是**主世界**，难度**不是和平**，`doMobSpawning` 与 `doPhantomCreeperSpawning` 都为 `true`
 2. 天色够暗（夜晚或雷暴天）；若开启了 `doPhantomCreeperDaytimeSpawning` 则忽略此条
-3. 玩家不是旁观模式，且**头顶能看到天空**（在洞穴或室内不会刷新）
+3. 玩家不是旁观模式
 
-满足条件就在该玩家上方 15～25 格、水平 ±10 格内的空位生成 `phantomCreeperSpawnCount` 只。
+然后按玩家所处位置生成 `phantomCreeperSpawnCount` 只：
+
+- **露天**（头顶能看到天空）：在玩家上方 15～25 格、水平 ±10 格内的空位生成
+- **室内**（头顶看不到天空，包括建筑和洞穴）：
+  - `doPhantomCreeperIndoorSpawning` 为 `false`（默认）：不生成
+  - 为 `true`：在玩家周围水平 ±8 格、距离玩家至少 3 格、**玩家能直接看到**的室内空位生成（不会刷进隔壁房间或地下的封闭空洞）。室内空间小，生成后往往很快就会进入 6 格引爆范围，非常危险
+
+### 连锁引爆
+
+每次刷新时，给同一名玩家生成的那一批幻翼苦力怕属于同一个编组：
+
+- 同组成员的爆炸**炸不死**彼此
+- 任何一只爆炸时，同组其余成员**不论距离多远、引信是否点燃，全部立刻引爆**
+- 不同批次、刷怪蛋或 `/summon` 召唤的不受影响（会被正常炸伤）
+
+也可以用 NBT 手动编组，例如召唤两只同组的：
+
+```mcfunction
+/summon phantomcreeper:phantom_creeper ~ ~10 ~ {SpawnGroup:[I;1,2,3,4]}
+/summon phantomcreeper:phantom_creeper ~5 ~10 ~ {SpawnGroup:[I;1,2,3,4]}
+```
 
 ## 可调参数
 

@@ -1,9 +1,11 @@
 package com.syyann.phantomcreeper.entity;
 
 import java.util.EnumSet;
+import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.syyann.phantomcreeper.ModEntities;
 import com.syyann.phantomcreeper.ModGameRules;
 
 import net.minecraft.entity.EntityDimensions;
@@ -16,11 +18,14 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -60,6 +65,10 @@ public class PhantomCreeperEntity extends PhantomEntity {
     @Nullable
     private BlockPos anchor;
     private boolean diving;
+    /** 同一批自然生成的幻翼苦力怕共享此 ID；刷怪蛋、指令召唤的没有编组（除非 NBT 指定） */
+    @Nullable
+    private UUID spawnGroup;
+    private boolean exploding;
     private int lastFuseTime;
     private int currentFuseTime;
 
@@ -105,12 +114,43 @@ public class PhantomCreeperEntity extends PhantomEntity {
     }
 
     private void explode() {
-        if (!this.getWorld().isClient) {
-            this.dead = true;
-            // ExplosionSourceType.MOB 会遵守 mobGriefing 游戏规则
-            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), EXPLOSION_POWER, World.ExplosionSourceType.MOB);
-            this.discard();
+        if (this.getWorld().isClient || this.exploding) {
+            return;
         }
+        this.exploding = true;
+        this.dead = true;
+        // ExplosionSourceType.MOB 会遵守 mobGriefing 游戏规则
+        this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), EXPLOSION_POWER, World.ExplosionSourceType.MOB);
+        this.discard();
+        this.detonateGroup();
+    }
+
+    /** 同一批生成的其他成员不论在哪、引信是否点燃，全部立刻引爆 */
+    private void detonateGroup() {
+        if (this.spawnGroup == null || !(this.getWorld() instanceof ServerWorld serverWorld)) {
+            return;
+        }
+        UUID group = this.spawnGroup;
+        for (PhantomCreeperEntity member : serverWorld.getEntitiesByType(ModEntities.PHANTOM_CREEPER,
+                entity -> entity.isAlive() && group.equals(entity.spawnGroup))) {
+            member.explode();
+        }
+    }
+
+    public void setSpawnGroup(@Nullable UUID spawnGroup) {
+        this.spawnGroup = spawnGroup;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource damageSource) {
+        // 同组成员的爆炸炸不死自己，这样才能被连锁引爆，而不是先被炸死
+        if (this.spawnGroup != null
+                && damageSource.isIn(DamageTypeTags.IS_EXPLOSION)
+                && damageSource.getSource() instanceof PhantomCreeperEntity other
+                && this.spawnGroup.equals(other.spawnGroup)) {
+            return true;
+        }
+        return super.isInvulnerableTo(damageSource);
     }
 
     public void ignite() {
@@ -149,6 +189,9 @@ public class PhantomCreeperEntity extends PhantomEntity {
         }
         nbt.putBoolean("ignited", this.isIgnited());
         nbt.putShort("Fuse", (short) this.currentFuseTime);
+        if (this.spawnGroup != null) {
+            nbt.putUuid("SpawnGroup", this.spawnGroup);
+        }
     }
 
     @Override
@@ -161,6 +204,9 @@ public class PhantomCreeperEntity extends PhantomEntity {
             this.ignite();
         }
         this.currentFuseTime = nbt.getShort("Fuse");
+        if (nbt.containsUuid("SpawnGroup")) {
+            this.spawnGroup = nbt.getUuid("SpawnGroup");
+        }
         this.lastFuseTime = this.currentFuseTime;
     }
 

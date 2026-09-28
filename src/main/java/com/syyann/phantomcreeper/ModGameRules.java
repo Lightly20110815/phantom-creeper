@@ -14,7 +14,11 @@ public final class ModGameRules {
     public static final GameRules.Key<GameRules.BooleanRule> DO_PHANTOM_CREEPER_DAYTIME_SPAWNING = GameRuleRegistry.register(
             "doPhantomCreeperDaytimeSpawning", GameRules.Category.SPAWNING, GameRuleFactory.createBooleanRule(false));
 
-    /** 每次刷新时，在每名玩家上空生成的数量 */
+    /** 玩家头顶看不到天空（建筑内、洞穴里）时是否也生成；开启后直接生成在玩家所在的室内空间 */
+    public static final GameRules.Key<GameRules.BooleanRule> DO_PHANTOM_CREEPER_INDOOR_SPAWNING = GameRuleRegistry.register(
+            "doPhantomCreeperIndoorSpawning", GameRules.Category.SPAWNING, GameRuleFactory.createBooleanRule(false));
+
+    /** 每次刷新时，在每名玩家附近生成的数量 */
     public static final GameRules.Key<GameRules.IntRule> PHANTOM_CREEPER_SPAWN_COUNT = GameRuleRegistry.register(
             "phantomCreeperSpawnCount", GameRules.Category.SPAWNING, GameRuleFactory.createIntRule(1, 1, 64));
 
