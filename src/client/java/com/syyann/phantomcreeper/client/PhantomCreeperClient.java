@@ -8,6 +8,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 public class PhantomCreeperClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.register(ModEntities.PHANTOM_CREEPER, PhantomCreeperRenderer::new);
+        //? if >=1.21.2 {
+        /*EntityRendererRegistry.register(ModEntities.PHANTOM_CREEPER, PhantomCreeperRenderer::new);
+        *///?} else {
+        EntityRendererRegistry.register(ModEntities.PHANTOM_CREEPER, LegacyPhantomCreeperRenderer::new);
+        //?}
     }
 }

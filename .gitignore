@@ -7,3 +7,5 @@ bin/
 *.iml
 .vscode/
 .DS_Store
+versions/*/build/
+versions/*/.gradle/
