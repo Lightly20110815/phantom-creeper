@@ -1,0 +1,12 @@
+{
+  "entity.phantomcreeper.phantom_creeper": "Phantom Creeper",
+  "item.phantomcreeper.phantom_creeper_spawn_egg": "Phantom Creeper Spawn Egg",
+  "gamerule.doPhantomCreeperSpawning": "Spawn Phantom Creepers",
+  "gamerule.doPhantomCreeperSpawning.description": "Whether phantom creepers spawn naturally above players.",
+  "gamerule.doPhantomCreeperDaytimeSpawning": "Spawn Phantom Creepers during the day",
+  "gamerule.doPhantomCreeperDaytimeSpawning.description": "Also spawn during the day. While enabled, phantom creepers don't burn in sunlight.",
+  "gamerule.phantomCreeperSpawnCount": "Phantom Creepers per spawn",
+  "gamerule.phantomCreeperSpawnCount.description": "How many spawn 15-25 blocks above each player every time spawning happens.",
+  "gamerule.phantomCreeperSpawnInterval": "Phantom Creeper spawn interval (seconds)",
+  "gamerule.phantomCreeperSpawnInterval.description": "Seconds between spawns."
+}

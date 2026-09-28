@@ -1,0 +1,12 @@
+{
+  "entity.phantomcreeper.phantom_creeper": "幻翼苦力怕",
+  "item.phantomcreeper.phantom_creeper_spawn_egg": "幻翼苦力怕刷怪蛋",
+  "gamerule.doPhantomCreeperSpawning": "生成幻翼苦力怕",
+  "gamerule.doPhantomCreeperSpawning.description": "是否在玩家上空自然生成幻翼苦力怕。",
+  "gamerule.doPhantomCreeperDaytimeSpawning": "白天也生成幻翼苦力怕",
+  "gamerule.doPhantomCreeperDaytimeSpawning.description": "开启后白天也会生成，并且幻翼苦力怕不会被阳光烧着。",
+  "gamerule.phantomCreeperSpawnCount": "每次生成的幻翼苦力怕数量",
+  "gamerule.phantomCreeperSpawnCount.description": "每次刷新时，在每名玩家上方 15~25 格内生成的数量。",
+  "gamerule.phantomCreeperSpawnInterval": "幻翼苦力怕生成间隔（秒）",
+  "gamerule.phantomCreeperSpawnInterval.description": "每隔多少秒刷新一次。"
+}

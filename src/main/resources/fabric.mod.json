@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "phantomcreeper",
+  "version": "${version}",
+  "name": "Phantom Creeper",
+  "description": "A phantom carrying a creeper. Spawns above players, locks on, dives and explodes.",
+  "authors": ["Lightly20110815"],
+  "contact": {
+    "homepage": "https://github.com/Lightly20110815/phantom-creeper",
+    "sources": "https://github.com/Lightly20110815/phantom-creeper",
+    "issues": "https://github.com/Lightly20110815/phantom-creeper/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.syyann.phantomcreeper.PhantomCreeperMod"],
+    "client": ["com.syyann.phantomcreeper.client.PhantomCreeperClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
